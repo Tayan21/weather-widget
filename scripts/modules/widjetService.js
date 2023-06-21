@@ -1,12 +1,23 @@
-import { renderWidjetForecast, renderWidjetOther, renderWidjetToday } from "./render.js";
+import { fetchWeather } from "./APIservice.js";
+import {
+  renderWidjetForecast,
+  renderWidjetOther,
+  renderWidjetToday,
+} from "./render.js";
 
-export const startWidjet = () => {
-    const widjet = document.createElement('div');
-    widjet.classList.add('widget');
+export const startWidjet = async () => {
+  const widjet = document.createElement("div");
+  widjet.classList.add("widget");
 
-    renderWidjetToday(widjet);
-    renderWidjetOther(widjet);
-    renderWidjetForecast(widjet);
+  const dataWeather = await fetchWeather("Astana");
+  if (dataWeather.succes) {
+    renderWidjetToday(widjet, dataWeather.data);
+    renderWidjetOther(widjet, dataWeather.data);
+  } else {
+    showError();
+  }
 
-    return widjet;
-}
+  renderWidjetForecast(widjet);
+
+  return widjet;
+};

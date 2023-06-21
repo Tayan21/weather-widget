@@ -1,8 +1,8 @@
 import { getCurrentDateTime } from "./utils.js";
 
-export const renderWidjetToday = (widjet) => {
+export const renderWidjetToday = (widjet, data) => {
   const currentDateTime = getCurrentDateTime();
-  
+  console.log(data)
   
   widjet.insertAdjacentHTML(
     "beforeend",
@@ -13,22 +13,22 @@ export const renderWidjetToday = (widjet) => {
     <p class="widget__day">${currentDateTime.dayOfWeek}</p>
   </div>
   <div class="widget__icon">
-    <img class="widget__img" src="./icon/01d.svg" alt="Погода">
+    <img class="widget__img" src="./icon/${data.weather[0].icon}.svg" alt="Погода">
   </div>
   <div class="widget__wheather">
     <div class="widget__city">
-      <p>Калининград</p>
+      <p>${data.name}</p>
       <button class="widget__change-city" aria-label="Изменить город"></button>
     </div>
-    <p class="widget__temp-big">19.3°C</p>
+    <p class="widget__temp-big">${(data.main.temp - 273.15).toFixed(1)}°C</p>
     <p class="widget__felt">ощущается</p>
-    <p class="widget__temp-small">18.8 °C</p>
+    <p class="widget__temp-small">${(data.main.feels_like - 273.15).toFixed(1)}°C</p>
   </div>
 </div>`
   );
 };
 
-export const renderWidjetOther = (widjet) => {
+export const renderWidjetOther = (widjet, data) => {
   widjet.insertAdjacentHTML(
     "beforeend",
     `<div class="widget__other">
@@ -40,7 +40,7 @@ export const renderWidjetOther = (widjet) => {
   </div>
   <div class="widget__humidity">
     <p class="widget__humidity-title">Влажность</p>
-    <p class="widget__humidity-value">27%</p>
+    <p class="widget__humidity-value">${data.main.humidity}%</p>
     <p class="widget__humidity-text">Т.Р: -0.2 °C</p>
   </div>
   <div class="widget__pressure">
@@ -84,3 +84,9 @@ export const renderWidjetForecast = (widjet) => {
 </ul>`
   );
 };
+
+
+export const showError = (widget, error) => {
+  widget.textContent = error.toString();
+  widget.classList.add('widget_error');
+}
